@@ -1,7 +1,6 @@
-<h1>{{ title }}</h1>
-
-<ul>
-  @for (user of users; track user.id) {
-  <li>{{ user.id }} - {{ user.userName }}</li>
-  }
-</ul>
+<div class="d-flex h-100 text-center text-bg-dark">
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column" >
+    <app-nav></app-nav>
+    <app-home></app-home>
+  </div>
+</div>

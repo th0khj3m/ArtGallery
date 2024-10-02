@@ -1,0 +1,41 @@
+<form #loginForm="ngForm" (ngSubmit)="register()" autocomplete="off">
+  <div class="form-floating mb-3">
+    <input
+      name="username"
+      [(ngModel)]="model.username"
+      type="text"
+      class="form-control rounded-3"
+      id="floatingInput"
+      placeholder="Username"
+    />
+    <label for="floatingInput">Username</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input
+      name="password"
+      [(ngModel)]="model.password"
+      type="password"
+      class="form-control rounded-3"
+      id="floatingPassword"
+      placeholder="Password"
+    />
+    <label for="floatingPassword">Password</label>
+  </div>
+  <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" (click)="register()" type="submit">
+    Register
+  </button>
+  <hr class="my-4" />
+  <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
+  <button
+    class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3"
+    type="submit"
+  >
+    Continue with Google
+  </button>
+  <button
+    class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3"
+    type="submit"
+  >
+    Continue with Facebook
+  </button>
+</form>
