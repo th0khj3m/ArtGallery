@@ -2,24 +2,13 @@
 
 namespace Core.Entities
 {
-    public class User
+    public class User : BaseEntity
     {
-        public int Id { get; set; }
+        public required string UserName { get; set; }
 
-        [Required]
-        public string UserName { get; set; }
+        public required byte[] PasswordHash { get; set; }
 
-        [Required]
-        public byte[] PasswordHash { get; set; }
+        public required byte[] PasswordSalt { get; set; }
 
-        [Required]
-        public byte[] PasswordSalt { get; set; }
-
-        public User(string userName, byte[] passwordHash, byte[] passwordSalt)
-        {
-            UserName = userName ?? throw new ArgumentNullException(nameof(userName), "UserName is required");
-            PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash), "PasswordHash is required");
-            PasswordSalt = passwordSalt ?? throw new ArgumentNullException(nameof(passwordSalt), "PasswordSalt is required");
-        }
     }
 }

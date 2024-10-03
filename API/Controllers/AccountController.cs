@@ -1,7 +1,7 @@
-﻿using Core.Data;
-using Core.DTOs;
+﻿using Core.DTOs;
+using Core.Entities;
 using Core.Interfaces;
-using Core.Models;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -9,17 +9,8 @@ using System.Text;
 
 namespace Core.Controllers
 {
-    public class AccountController : BaseApiController
+    public class AccountController(StoreContext context, ITokenService tokenService) : BaseApiController
     {
-        private readonly DataContext _context;
-        private readonly ITokenService _tokenService;
-
-        public AccountController(DataContext context, ITokenService tokenService)
-        {
-            _context = context;
-            _tokenService = tokenService;
-        }
-
         [HttpPost("register")] // account/register
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
@@ -27,23 +18,27 @@ namespace Core.Controllers
 
             using var hmac = new HMACSHA512();
 
-            var user = new User(
-                userName: registerDto.Username.ToLower(),
-                passwordHash: hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                passwordSalt: hmac.Key
-            );
+            var user = new User
+            {
+                UserName = registerDto.Username.ToLower(),
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+                PasswordSalt = hmac.Key
+            };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
 
-            return new UserDto(registerDto.Username,
-                _tokenService.CreateToken(user));
+            return new UserDto
+            {
+                Username = registerDto.Username,
+                Token = tokenService.CreateToken(user)
+            };
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
+            var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
             if (user == null) return Unauthorized("Invalid username");
 
@@ -57,13 +52,16 @@ namespace Core.Controllers
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
             }
 
-            return new UserDto(user.UserName,
-                _tokenService.CreateToken(user));
+            return new UserDto
+            {
+                Username = loginDto.Username,
+                Token = tokenService.CreateToken(user)
+            };
         }
 
         private async Task<bool> UserExists(string username)
         {
-            return await _context.Users.AnyAsync(x => x.UserName.ToLower() == username.ToLower());
+            return await context.Users.AnyAsync(x => x.UserName.ToLower() == username.ToLower());
         }
     }
 }

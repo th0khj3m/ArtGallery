@@ -1,6 +1,6 @@
-﻿namespace Core.Entities
+﻿namespace Core.DTOs
 {
-    public class Artwork : BaseEntity
+    public class ArtworkDto
     {
         public required string Title { get; set; }
         public required string Description { get; set; }

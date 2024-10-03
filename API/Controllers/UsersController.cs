@@ -6,20 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Controllers
 {
-    public class UsersController : BaseApiController
+    public class UsersController(StoreContext context) : BaseApiController
     {
-        private readonly DataContext _context;
-
-        public UsersController(DataContext context)
-        {
-            _context = context;
-        }
-
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await context.Users.ToListAsync();
 
             return Ok(users);
         }
@@ -28,7 +21,7 @@ namespace Core.Controllers
         [HttpGet("{id:int}")] // users/3
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await context.Users.FindAsync(id);
 
             if (user == null) return NotFound();
 
