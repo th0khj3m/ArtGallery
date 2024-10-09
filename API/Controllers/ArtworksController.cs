@@ -3,22 +3,26 @@ using Core.DTOs;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class ArtworksController(IArtworkRepository repo) : BaseApiController
+    public class ArtworksController(IGenericRepository<Artwork> repo) : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Artwork>>> GetArtworks([FromQuery] decimal? minPrice, decimal? maxPrice, SortOrder sort = SortOrder.priceAsc)
+        public async Task<ActionResult<IReadOnlyList<Artwork>>> GetArtworks([FromQuery] decimal? minPrice, decimal? maxPrice, SortOrder? sort = SortOrder.priceAsc)
         {
-            return Ok(await repo.GetArtworksAsync(minPrice, maxPrice, sort));
+            var spec = new ArtworkSpecification(minPrice, maxPrice, sort);
+            var artworks = await repo.ListAsync(spec);
+
+            return Ok(artworks);
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Artwork>> GetArtwork(int id)
         {
-            var artwork = await repo.GetArtworkByIdAsync(id);
+            var artwork = await repo.GetByIdAsync(id);
 
             if (artwork == null) return NotFound();
 
@@ -37,8 +41,8 @@ namespace API.Controllers
                 QuantityInStock = artworkDto.QuantityInStock,
             };
 
-            repo.AddArtwork(artwork);
-            if (await repo.SaveChangesAsync())
+            repo.Add(artwork);
+            if (await repo.SaveAllAsync())
             {
                 return CreatedAtAction("GetArtwork", new { id = artwork.Id }, artwork);
             }
@@ -51,9 +55,9 @@ namespace API.Controllers
         {
             if (artwork.Id != id || !ArtworkExists(id)) return BadRequest("Cannot update this product");
 
-            repo.UpdateArtwork(artwork);
+            repo.Update(artwork);
 
-            if (await repo.SaveChangesAsync())
+            if (await repo.SaveAllAsync())
             {
                 return NoContent();
             }
@@ -64,13 +68,13 @@ namespace API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteArtwork(int id)
         {
-            var artwork = await repo.GetArtworkByIdAsync(id);
+            var artwork = await repo.GetByIdAsync(id);
 
             if (artwork == null) return NotFound();
 
-            repo.DeleteArtwork(artwork);
+            repo.Remove(artwork);
 
-            if (await repo.SaveChangesAsync())
+            if (await repo.SaveAllAsync())
             {
                 return NoContent();
             }
@@ -78,9 +82,23 @@ namespace API.Controllers
             return BadRequest("Problem deleting the product");
         }
 
+        //[HttpGet("brands")]
+        //public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
+        //{
+        //    var spec = new BrandListSpecification();
+        //    return Ok(await repo.ListAsync(spec));
+        //}
+
+        //[HttpGet("types")]
+        //public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
+        //{
+        //    var spec = new TypeListSpecification();
+        //    return Ok(await repo.ListAsync(spec));
+        //}
+
         private bool ArtworkExists(int id)
         {
-            return repo.ArtworkExists(id);
+            return repo.Exist(id);
         }
 
     }

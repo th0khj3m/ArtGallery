@@ -47,6 +47,11 @@ namespace Infrastructure.Data
             return await query.ToListAsync();
         }
 
+        //public async Task<IReadOnlyList<string>> GetTypesAsync()
+        //{
+        //    return await context.Artworks.Select(x => x.Type).Distinct().ToListAsync(); 
+        //}
+
         public async Task<bool> SaveChangesAsync()
         {
             return await context.SaveChangesAsync() > 0;
