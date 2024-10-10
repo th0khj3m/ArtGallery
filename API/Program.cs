@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using API.Extensions;
+using Core.Extensions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Core.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,9 +52,15 @@ if (app.Environment.IsDevelopment())
 }
 
 // Enable CORS
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
+    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
 
 app.UseHttpsRedirection();
+
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
+    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 

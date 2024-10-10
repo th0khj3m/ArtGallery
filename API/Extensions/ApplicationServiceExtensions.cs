@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
 using System.Text.Json.Serialization;
 
-namespace API.Extensions
+namespace Core.Extensions
 {
     public static class ApplicationServiceExtensions
     {

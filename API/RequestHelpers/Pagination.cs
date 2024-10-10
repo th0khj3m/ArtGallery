@@ -1,4 +1,4 @@
-﻿namespace API.RequestHelpers
+﻿namespace Core.RequestHelpers
 {
     public class Pagination<T>
     {

@@ -1,11 +1,10 @@
-﻿using Core.Controllers;
-using Core.DTOs;
+﻿using API.DTOs;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+namespace Core.Controllers
 {
     public class ArtworksController(IGenericRepository<Artwork> repo) : BaseApiController
     {
@@ -40,6 +39,7 @@ namespace API.Controllers
             };
 
             repo.Add(artwork);
+
             if (await repo.SaveAllAsync())
             {
                 return CreatedAtAction("GetArtwork", new { id = artwork.Id }, artwork);
