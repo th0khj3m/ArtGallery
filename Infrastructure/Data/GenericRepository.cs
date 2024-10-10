@@ -11,6 +11,11 @@ namespace Infrastructure.Data
             context.Set<T>().Add(entity);
         }
 
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
+
         public bool Exist(int id)
         {
             return context.Set<T>().Any(x => x.Id == id);

@@ -5,12 +5,15 @@ namespace Core.Specifications
 {
     public class ArtworkSpecification : BaseSpecification<Artwork>
     {
-        public ArtworkSpecification(decimal? minPrice, decimal? maxPrice, SortOrder? sort) : base(x =>
-            (!minPrice.HasValue || x.Price >= minPrice.Value) &&
-            (!maxPrice.HasValue || x.Price <= maxPrice.Value)
+        public ArtworkSpecification(ArtworkSpecParams specParams) : base(x =>
+            (string.IsNullOrEmpty(specParams.Search) || x.Title.ToLower().Contains(specParams.Search)) &&
+            (!specParams.MinPrice.HasValue || x.Price >= specParams.MinPrice.Value) &&
+            (!specParams.MaxPrice.HasValue || x.Price <= specParams.MaxPrice.Value)
         )
         {
-            switch (sort)
+            ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
+
+            switch (specParams.Sort)
             {
                 case SortOrder.priceAsc:
                     AddOrderBy(x => x.Price);

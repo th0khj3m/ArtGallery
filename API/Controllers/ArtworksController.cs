@@ -1,7 +1,6 @@
 ﻿using Core.Controllers;
 using Core.DTOs;
 using Core.Entities;
-using Core.Enums;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +10,11 @@ namespace API.Controllers
     public class ArtworksController(IGenericRepository<Artwork> repo) : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Artwork>>> GetArtworks([FromQuery] decimal? minPrice, decimal? maxPrice, SortOrder? sort = SortOrder.priceAsc)
+        public async Task<ActionResult<IReadOnlyList<Artwork>>> GetArtworks([FromQuery] ArtworkSpecParams specParams)
         {
-            var spec = new ArtworkSpecification(minPrice, maxPrice, sort);
-            var artworks = await repo.ListAsync(spec);
+            var spec = new ArtworkSpecification(specParams);
 
-            return Ok(artworks);
+            return await CreatePagedResult(repo, spec, specParams.PageIndex, specParams.PageSize);
         }
 
         [HttpGet("{id:int}")]

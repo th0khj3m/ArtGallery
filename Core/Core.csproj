@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Specifications\BrandListSpecification.cs" />
+    <Compile Remove="Specifications\TypeListSpecification.cs" />
+  </ItemGroup>
+
 </Project>
