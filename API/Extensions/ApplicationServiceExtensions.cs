@@ -18,10 +18,10 @@ namespace Core.Extensions
             {
                 opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
-            services.AddCors();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IArtworkRepository, ArtworkRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddCors();
 
             return services;
         }
