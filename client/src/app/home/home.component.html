@@ -12,5 +12,11 @@
         >Learn more</a
       >
     </p>
+
+    <ul>
+      @for (artwork of artworks; track artwork.id) {
+      <li>{{ artwork.title }}</li>
+      }
+    </ul>
   </div>
 </main>

@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(),
-    provideAnimations(), provideAnimationsAsync()
+    provideAnimations(), provideAnimationsAsync(),
   ]
 };

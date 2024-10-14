@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
 import { MatBadge } from "@angular/material/badge";
+import { MatDialog } from '@angular/material/dialog';
+import { AuthModalComponent } from '../../auth-modal/auth-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -9,11 +11,16 @@ import { MatBadge } from "@angular/material/badge";
   imports: [
     MatIcon,
     MatButton,
-    MatBadge
+    MatBadge,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  private dialogService = inject(MatDialog);
+
+  openLoginModal() {
+    this.dialogService.open(AuthModalComponent);
+  }
 
 }
