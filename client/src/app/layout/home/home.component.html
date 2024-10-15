@@ -1,0 +1,20 @@
+<main>
+  <div
+    class="flex flex-col my-10 space-y-3 h-screen justify-center items-center"
+  >
+    <h1 class="text-3xl">Art</h1>
+    <p class="text-xl text-wrap w-1/2 mx-auto">
+      Cover is a one-page template for building simple and beautiful home pages.
+      Download, edit the text, and add your own fullscreen background photo to
+      make it your own.
+    </p>
+    <a href="#" class="font-bold btn border-white bg-white">Learn more</a>
+  </div>
+
+
+  <div class="grid grid-cols-3 gap-2">
+    @for (artwork of artworks; track artwork.id) {
+    <app-artwork-item [artwork]="artwork"></app-artwork-item>
+    }
+  </div>
+</main>

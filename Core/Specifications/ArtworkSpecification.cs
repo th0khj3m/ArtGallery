@@ -6,7 +6,7 @@ namespace Core.Specifications
     public class ArtworkSpecification : BaseSpecification<Artwork>
     {
         public ArtworkSpecification(ArtworkSpecParams specParams) : base(x =>
-            (string.IsNullOrEmpty(specParams.Search) || x.Title.ToLower().Contains(specParams.Search)) &&
+            (string.IsNullOrEmpty(specParams.Search) || x.Title.Contains(specParams.Search, StringComparison.CurrentCultureIgnoreCase)) &&
             (!specParams.MinPrice.HasValue || x.Price >= specParams.MinPrice.Value) &&
             (!specParams.MaxPrice.HasValue || x.Price <= specParams.MaxPrice.Value)
         )

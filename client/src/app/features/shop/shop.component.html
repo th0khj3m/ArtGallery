@@ -1,0 +1,14 @@
+<div class="flex flex-col gap-3">
+  <div class="flex justify-end">
+    <button mat-stroked-button (click)="openFiltersDialog()">
+      <mat-icon>tune</mat-icon>
+      Filters
+    </button>
+  </div>
+</div>
+
+<div class="grid grid-cols-4 gap-2">
+  @for (artwork of artworks; track artwork.id) {
+    <app-artwork-item [artwork]="artwork"></app-artwork-item>
+   }
+</div>

@@ -1,0 +1,9 @@
+@if (artwork) {
+<mat-card class="bg-dark">
+  <img src="{{ artwork.imageUrl }}" alt="Image of {{ artwork.title }}" />
+  <mat-card-content class="mt-2 text-left">
+    <h2 class="text-sm font-semibold uppercase">{{ artwork.title }}</h2>
+    <p class="font-light">{{ artwork.price | currency }}</p>
+  </mat-card-content>
+</mat-card>
+}

@@ -1,18 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavComponent } from "./nav/nav.component";
-import { AccountService } from './_services/account.service';
-import { HomeComponent } from "./home/home.component";
+import { AccountService } from './core/services/account.service';
+import { HomeComponent } from "./layout/home/home.component";
 import { HeaderComponent } from "./layout/header/header.component";
+import { ShopComponent } from './features/shop/shop.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavComponent, HomeComponent, HeaderComponent],
+  imports: [RouterOutlet, HomeComponent, HeaderComponent, ShopComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
+  title = "PoemArtGallery";
   private accountService = inject(AccountService);
 
   ngOnInit(): void {
