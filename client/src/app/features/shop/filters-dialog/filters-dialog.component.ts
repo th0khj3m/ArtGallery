@@ -5,45 +5,50 @@ import { MatSliderModule } from "@angular/material/slider";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input"
 import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-filters-dialog',
   standalone: true,
-  imports: [MatDivider, MatSliderModule, MatFormField, MatLabel, MatInput, FormsModule, CurrencyPipe],
+  imports: [MatDivider, MatSliderModule, MatFormField, MatLabel, MatInput, FormsModule, CurrencyPipe, MatButton, FormsModule],
   templateUrl: './filters-dialog.component.html',
   styleUrl: './filters-dialog.component.scss'
 })
 export class FiltersDialogComponent {
   shopService = inject(ShopService);
-  priceRange = {
-    low: 0,
-    high: 1000000000,
-  };
+  private dialogRef = inject(MatDialogRef<FiltersDialogComponent>)
+  data = inject(MAT_DIALOG_DATA);
+
+  priceRange = this.data.priceRange;
+
   sliderConfig = {
     min: 0,
-    max: 1000000000,
+    max: 100000000,
     step: 100000
   }
 
   onLowChange(value: string) {
     // Remove currency formatting and parse to number
-    const newValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
-    if (!isNaN(newValue)) {
-      this.priceRange.low = newValue;
+    const lowValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
+    if (!isNaN(lowValue)) {
+      this.priceRange.low = lowValue;
     }
   }
 
   onHighChange(value: string) {
     // Remove currency formatting and parse to number
-    const newValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
-    if (!isNaN(newValue)) {
-      this.priceRange.high = newValue;
+    const highValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
+    if (!isNaN(highValue)) {
+      this.priceRange.high = highValue;
     }
   }
 
   applyFilters() {
-    console.log("Filters applied with price range:", this.priceRange);
+    this.dialogRef.close({
+      priceRange: this.priceRange
+    });
   }
 
 }

@@ -12,9 +12,8 @@
           placeholder="Low"
           type="text"
           [ngModel]="priceRange.low | currency : 'VND' : 'symbol' : '1.0-0'"
-          (ngModelChange)="priceRange.low=$event"
+          (ngModelChange)="onLowChange($event)"
         />
-
       </mat-form-field>
       <mat-form-field appearance="outline">
         <input
@@ -39,6 +38,6 @@
   </div>
 
   <div class="flex justify-end p-4">
-    <button mat-flat-button>Apply Filters</button>
+    <button mat-flat-button (click)="applyFilters()">Apply Filters</button>
   </div>
 </div>

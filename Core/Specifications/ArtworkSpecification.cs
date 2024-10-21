@@ -6,7 +6,7 @@ namespace Core.Specifications
     public class ArtworkSpecification : BaseSpecification<Artwork>
     {
         public ArtworkSpecification(ArtworkSpecParams specParams) : base(x =>
-            (string.IsNullOrEmpty(specParams.Search) || x.Title.Contains(specParams.Search, StringComparison.CurrentCultureIgnoreCase)) &&
+            (string.IsNullOrEmpty(specParams.Search) || x.Title.Contains(specParams.Search, StringComparison.OrdinalIgnoreCase)) &&
             (!specParams.MinPrice.HasValue || x.Price >= specParams.MinPrice.Value) &&
             (!specParams.MaxPrice.HasValue || x.Price <= specParams.MaxPrice.Value)
         )
@@ -20,6 +20,9 @@ namespace Core.Specifications
                     break;
                 case SortOrder.priceDesc:
                     AddOrderByDescending(x => x.Price);
+                    break;
+                case SortOrder.title:
+                    AddOrderBy(x => x.Title);
                     break;
                 default:
                     AddOrderBy(x => x.Title);

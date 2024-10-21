@@ -13,7 +13,9 @@ namespace Infrastructure.Data
 
         public async Task<int> CountAsync(ISpecification<T> spec)
         {
-            return await ApplySpecification(spec).CountAsync();
+            var query = context.Set<T>().AsQueryable();
+            query = spec.ApplyCriteria(query);
+            return await query.CountAsync();
         }
 
         public bool Exist(int id)
