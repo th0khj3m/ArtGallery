@@ -1,5 +1,9 @@
 @if (artwork) {
-<mat-card class="bg-dark custom-card" appearance="outlined">
+<mat-card
+  class="bg-dark artwork-card"
+  appearance="outlined"
+  routerLink="/shop/{{ artwork.id }}"
+>
   <img src="{{ artwork.imageUrl }}" alt="Image of {{ artwork.title }}" />
   <mat-card-content class="mt-2 text-left">
     <h2 class="text-sm font-semibold uppercase">{{ artwork.title }}</h2>

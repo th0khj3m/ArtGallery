@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AccountService } from './core/services/account.service';
-import { HomeComponent } from "./layout/home/home.component";
 import { HeaderComponent } from "./layout/header/header.component";
 import { ShopComponent } from './features/shop/shop.component';
+import { HomeComponent } from './features/home/home.component';
 
 @Component({
   selector: 'app-root',

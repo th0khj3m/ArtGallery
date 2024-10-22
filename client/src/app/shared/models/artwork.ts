@@ -1,7 +1,7 @@
 export type Artwork = {
   id: number;
   title: string;
-  decription: string;
+  description: string;
   price: number;
   imageUrl: string;
   quantityInStock: number;

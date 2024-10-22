@@ -9,7 +9,7 @@ import { ArtworkItemComponent } from '../../features/shop/artwork-item/artwork-i
   standalone: true,
   imports: [ MatCard, ArtworkItemComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   private shopService = inject(ShopService);

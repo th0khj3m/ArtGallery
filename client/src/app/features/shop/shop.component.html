@@ -1,9 +1,10 @@
+@if (artworks) {
 <div class="container flex flex-col gap-3">
   <div class="flex justify-between mt-4">
     <form
       #searchForm="ngForm"
       (ngSubmit)="onSearchChange()"
-      class="relative flex items-center w-full max-w-md "
+      class="relative flex items-center w-full max-w-md"
     >
       <input
         type="search"
@@ -22,7 +23,7 @@
     </form>
   </div>
 
-  <div class="flex gap-2 mt-4">
+  <div class="flex gap-2 my-4">
     <button mat-stroked-button (click)="openFiltersDialog()">
       <mat-icon>tune</mat-icon>
       Filters
@@ -33,8 +34,8 @@
     </button>
   </div>
 
-  <div class="grid grid-cols-4 gap-4">
-    @for (artwork of artworks?.data; track artwork.id) {
+  <div class="grid grid-cols-5 gap-4">
+    @for (artwork of artworks.data; track artwork.id) {
     <app-artwork-item [artwork]="artwork"></app-artwork-item>
     }
   </div>
@@ -57,7 +58,7 @@
 
   <mat-paginator
     (page)="handlePageEvent($event)"
-    [length]="artworks?.count"
+    [length]="artworks.count"
     [pageSize]="shopParams.pageSize"
     [showFirstLastButtons]="true"
     [pageSizeOptions]="pageSizeOptions"
@@ -67,3 +68,4 @@
   >
   </mat-paginator>
 </div>
+}

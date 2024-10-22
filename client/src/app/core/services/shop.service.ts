@@ -35,4 +35,7 @@ export class ShopService {
     return this.http.get<Pagination<Artwork>>(this.baseUrl + "artworks", { params });
   }
 
+  getArtwork(id: number) {
+    return this.http.get<Artwork>(this.baseUrl + "artworks/" + id);
+  }
 }

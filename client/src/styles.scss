@@ -23,13 +23,23 @@ $customTheme: mat.define-theme();
     color: #7d00fa;
   }
 
-  // button.match-input-height {
-  //   height: var(--mat-form-field-container-height) !important;
-  // }
+  button.match-input-height {
+    height: var(--mat-form-field-container-height) !important;
+  }
 
+  .mdc-notched-outline__notch {
+    border-right-style: none !important;
+  }
 
+  .mdc-text-field:not(.mdc-text-field--invalid):not(
+      .mdc-text-field--focused
+    ):not(.mdc-text-field--disabled):hover {
+    .mdc-notched-outline > * {
+      border-color: white !important; /* Change to red on hover */
+    }
+  }
 
-
-  
+  mat-label {
+    color: rgba(255, 255, 255, 0.5);
+  }
 }
-
