@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthModalComponent } from '../auth-modal/auth-modal.component';
 import { AccountService } from '../../core/services/account.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatProgressBar } from "@angular/material/progress-bar";
+import { BusyService } from '../../core/services/busy.service';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +17,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     MatButton,
     MatBadge,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    MatProgressBar
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -24,6 +27,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export class HeaderComponent {
   private dialogService = inject(MatDialog);
   accountService = inject(AccountService);
+  busyService = inject(BusyService)
 
   openLoginModal() {
     this.dialogService.open(AuthModalComponent);

@@ -1,6 +1,4 @@
 ﻿using Core.DTOs;
-using Core.Controllers;
-using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Core.Controllers

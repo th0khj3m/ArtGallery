@@ -3,13 +3,15 @@ import { provideRouter } from '@angular/router';
 import { provideAnimations } from "@angular/platform-browser/animations"
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor])),
     provideAnimations(), provideAnimationsAsync(),
   ]
 };

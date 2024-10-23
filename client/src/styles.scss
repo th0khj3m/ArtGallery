@@ -24,18 +24,39 @@ $customTheme: mat.define-theme();
   }
 
   button.match-input-height {
-    height: var(--mat-form-field-container-height) !important;
+    height: var(--mat-form-field-container-height);
   }
 
   .mdc-notched-outline__notch {
-    border-right-style: none !important;
+    border-right-style: none;
+  }
+
+  // Global mat-progress-bar color overrides
+  mat-progress-bar {
+    --mdc-linear-progress-active-indicator-color: #007bff;
+  }
+
+  .mat-mdc-snack-bar-container.snack-error {
+    --mdc-snackbar-container-color: red;
+    --mat-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+  .mat-mdc-snack-bar-container.snack-success {
+    --mdc-snackbar-container-color: green;
+    --mat-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+  .mat-mdc-snack-bar-action {
+    background-color: red;
   }
 
   .mdc-text-field:not(.mdc-text-field--invalid):not(
       .mdc-text-field--focused
     ):not(.mdc-text-field--disabled):hover {
     .mdc-notched-outline > * {
-      border-color: white !important; /* Change to red on hover */
+      border-color: white; /* Change to red on hover */
     }
   }
 
