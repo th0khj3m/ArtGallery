@@ -9,5 +9,16 @@
     <h2 class="text-sm font-semibold uppercase">{{ artwork.title }}</h2>
     <p class="font-light">{{ artwork.price | number : "1.0-0" }} ₫</p>
   </mat-card-content>
+  <!-- Preventing router link from activating when we use this click event -->
+  <!-- <mat-card-actions (click)="$event.stopPropagation()">
+    <button
+      mat-stroked-button
+      class="w-full"
+      (click)="cartService.addItemToCart(artwork)"
+    >
+      <mat-icon>add_shopping_cart</mat-icon>
+      Add to cart
+    </button>
+  </mat-card-actions> -->
 </mat-card>
 }

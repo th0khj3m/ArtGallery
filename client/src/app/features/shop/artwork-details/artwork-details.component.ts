@@ -8,6 +8,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatDivider } from '@angular/material/divider';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-artwork-details',
@@ -19,6 +20,7 @@ import { MatDivider } from '@angular/material/divider';
 export class ArtworkDetailsComponent implements OnInit {
   private shopService = inject(ShopService);
   private activatedRoute = inject(ActivatedRoute);
+  cartService = inject(CartService);
   artwork?: Artwork;
 
   ngOnInit(): void {

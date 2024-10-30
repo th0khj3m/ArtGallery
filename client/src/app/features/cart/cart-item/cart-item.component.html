@@ -1,0 +1,48 @@
+<div class="rounded-lg border-gray-200 bg-white p-4 shadow-sm mb-4 text-black">
+  <div class="flex items-center justify-between">
+    <a routerLink="/shop/{{ item().artworkId }}" class="shrink order-1">
+      <img src="{{ item().imageUrl }}" alt="product image" class="h-20 w-20" />
+    </a>
+
+    <div class="w-full flex-1 order-2 max-w-md">
+      <a routerLink="/shop/{{ item().artworkId }}" class="font-bold">
+        {{ item().artworkTitle }}
+      </a>
+    </div>
+
+    <div class="flex items-center justify-between order-3">
+      <div class="flex items-center align-middle gap-3">
+        <button mat-icon-button (click)="decrementQuantity()">
+          <mat-icon class="text-red-600">remove</mat-icon>
+        </button>
+
+        <!-- <div class="font-semibold text-xl mb-1">{{ item().quantity }}</div> -->
+        <input
+          type="number"
+          (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
+          class="font-semibold text-xl mb-1 w-12 text-center"
+          [value]="item().quantity"
+          (input)="updateQuantity($any($event.target).value)"
+          numbersOnly
+        />
+
+        <button mat-icon-button (click)="incrementQuantity()">
+          <mat-icon class="text-green-600">add</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="text-end order-4 w-32">
+      <p class="font-semibold text-lg">
+        {{ item().price | currency : "VND" : "symbol" : "1.0-0" }}
+      </p>
+    </div>
+
+    <div class="flex items-center order-5">
+      <button mat-button color="warn" (click)="removeItemFromCart()">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

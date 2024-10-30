@@ -1,6 +1,6 @@
 import { MatCard, MatCardActions, MatCardContent } from '@angular/material/card';
 import { Artwork } from './../../../shared/models/artwork';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { DecimalPipe } from '@angular/common';
