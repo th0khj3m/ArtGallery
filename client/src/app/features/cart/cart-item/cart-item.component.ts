@@ -7,6 +7,8 @@ import { MatIcon } from '@angular/material/icon';
 import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../../core/services/cart.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
 
 @Component({
   selector: 'app-cart-item',
@@ -18,24 +20,35 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class CartItemComponent {
   item = input.required<CartItem>();
   cartService = inject(CartService);
+  private dialogService = inject(MatDialog);
 
   incrementQuantity() {
     this.cartService.addItemToCart(this.item())
   }
 
   decrementQuantity() {
-    this.cartService.removeItemFromCart(this.item().artworkId);
+    if (this.item().quantity === 1) {
+      const dialogRef = this.dialogService.open(ConfirmDeleteDialogComponent, {
+        minWidth: "500px",
+        data: {
+          title: this.item().artworkTitle
+        }
+      });
+
+      dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.removeItemFromCart();
+        }
+      });
+    } else {
+      this.cartService.removeItemFromCart(this.item().artworkId);
+    }
   }
 
   updateQuantity(newQuantity: string) {
-    // Check if the input value is a valid number
-    const quantity = parseInt(newQuantity, 10)
-    if (!isNaN(quantity) && this.cartService.cart()) {
-
-    }
-
-    // Remove non-numeric characters
-    newQuantity = newQuantity.replace(/[^\d]/g, '');
+    if (newQuantity === "") return;
+    const quantity = Number(newQuantity);
+    this.cartService.changeItemQuantity(this.item().artworkId, quantity);
   }
 
   removeItemFromCart() {

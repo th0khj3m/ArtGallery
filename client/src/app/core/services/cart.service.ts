@@ -19,7 +19,7 @@ export class CartService {
   });
   totals = computed(() => {
     const cart = this.cart();
-    if (!cart) return null;
+    if (!cart) return { subtotal: 0, shipping: 0, discount: 0, total: 0 };
     const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const shipping = 0;
     const discount = 0;
@@ -48,7 +48,7 @@ export class CartService {
   }
 
   deleteCart() {
-    this.http.delete(this.baseUrl + "cart?id" + this.cart()?.id).subscribe({
+    this.http.delete(this.baseUrl + "cart?id=" + this.cart()?.id).subscribe({
       next: () => {
         localStorage.removeItem("cart_id");
         this.cart.set(null);
@@ -83,7 +83,16 @@ export class CartService {
     }
   }
 
+  changeItemQuantity(artworkId: number, newQuantity: number) {
+    const cart = this.cart();
+    if (!cart) return;
 
+    const item = cart.items.find(x => x.artworkId === artworkId);
+    if (item) {
+      item.quantity = newQuantity;
+      this.setCart(cart);
+    }
+  }
 
   private addOrUpdateItem(items: CartItem[], item: CartItem, quantity: number): void {
     const index = items.findIndex(x => x.artworkId === item.artworkId);

@@ -18,12 +18,11 @@
 
         <!-- <div class="font-semibold text-xl mb-1">{{ item().quantity }}</div> -->
         <input
-          type="number"
+          type="text"
           (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
           class="font-semibold text-xl mb-1 w-12 text-center"
           [value]="item().quantity"
           (input)="updateQuantity($any($event.target).value)"
-          numbersOnly
         />
 
         <button mat-icon-button (click)="incrementQuantity()">
