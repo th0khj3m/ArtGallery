@@ -1,1 +1,6 @@
-
+.custom-disabled {
+  background-color: #cccccc !important; /* Disabled background color */
+  color: #666666 !important;            /* Disabled text color */
+  opacity: 1 !important;                /* Override the default opacity */
+  pointer-events: none;                 /* Ensure it's non-clickable */
+}

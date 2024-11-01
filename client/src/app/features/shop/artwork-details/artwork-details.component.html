@@ -9,6 +9,7 @@
         <h1 class="text-2xl font-semibold text-white">
           {{ artwork.title }}
         </h1>
+
         <div class="mt-4 items-center gap-4 flex">
           <p class="text-3xl font-extrabold text-white">
             {{ artwork.price | number : "1.0-0" }} ₫
@@ -17,23 +18,30 @@
 
         <div class="flex gap-4 mt-6">
           <button
+            (click)="updateCart()"
+            [disabled]="quantity == quantityInCart"
             mat-flat-button
+            [ngClass]="{ 'custom-disabled': quantity == quantityInCart }"
             class="match-input-height"
-            (click)="cartService.addItemToCart(artwork)"
           >
             <mat-icon>shopping_cart</mat-icon>
-            Add to cart
+            {{ getButtonText() }}
           </button>
           <mat-form-field appearance="outline" class="flex">
             <mat-label class="text-white">Quantity</mat-label>
             <input
               matInput
               min="0"
-              type="text"
+              type="number"
+              [(ngModel)]="quantity"
               (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
             />
           </mat-form-field>
         </div>
+
+        <p class="mb-4">
+          You have {{ quantityInCart }} of this item in your cart
+        </p>
 
         <mat-divider></mat-divider>
 
