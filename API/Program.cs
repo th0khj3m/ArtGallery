@@ -4,6 +4,7 @@ using Core.Extensions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Core.Middleware;
+using Core.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGroup("api").MapIdentityApi<AppUser>(); //api/login
 
 // Create a scope to generate data inside db
 try

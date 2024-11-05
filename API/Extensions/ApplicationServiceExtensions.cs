@@ -19,7 +19,7 @@ namespace Core.Extensions
             {
                 opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped<ITokenService, TokenService>();
+            //services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IArtworkRepository, ArtworkRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddCors();
