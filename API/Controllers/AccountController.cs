@@ -77,7 +77,8 @@ namespace Core.Controllers
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
-                UserName = registerDto.Email
+                UserName = registerDto.Email,
+                LockoutEnabled = false
             };
 
             var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
@@ -118,7 +119,7 @@ namespace Core.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpGet("auth-status")]
         public ActionResult GetAuthState()
         {
             return Ok(new

@@ -13,12 +13,14 @@ import { ShopParams } from '../../shared/models/shopParams';
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { Pagination } from '../../shared/models/pagination';
 import { FormsModule } from '@angular/forms';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
   imports: [MatCard, ArtworkItemComponent, MatIcon, MatButton, MatMenu,
-    MatSelectionList, MatListOption, MatMenuTrigger, MatPaginator, FormsModule, MatIconButton],
+    MatSelectionList, MatListOption, MatMenuTrigger, MatPaginator, FormsModule, MatIconButton, MatInput],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss'
 })

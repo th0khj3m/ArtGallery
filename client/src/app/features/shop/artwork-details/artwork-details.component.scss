@@ -4,3 +4,7 @@
   opacity: 1 !important;                /* Override the default opacity */
   pointer-events: none;                 /* Ensure it's non-clickable */
 }
+
+:host ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: white;
+}

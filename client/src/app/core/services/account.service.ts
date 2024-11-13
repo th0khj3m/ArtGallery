@@ -1,37 +1,54 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { User } from '../../shared/models/user';
+import { Address, User } from '../../shared/models/user';
 import { map } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  baseUrl = "https://localhost:7198/api/";
+  baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
   currentUser = signal<User | null>(null);
 
-  login(model: any) {
-    return this.http.post<User>(this.baseUrl + "account/login", model).pipe(
+  login(values: any) {
+    // return this.http.post<User>(this.baseUrl + "account/login", model).pipe(
+    //   map(user => {
+    //     if (user) {
+    //       localStorage.setItem("user", JSON.stringify(user));
+    //       this.currentUser.set(user);
+    //     }
+    //   })
+    // )
+    let params = new HttpParams();
+    params = params.append("useCookies", true);
+    return this.http.post<User>(this.baseUrl + "login", values, { params });
+  }
+
+  register(values: any) {
+    return this.http.post(this.baseUrl + "account/register", values);
+  }
+
+  getUserInfo() {
+    return this.http.get<User>(this.baseUrl + "account/user-info").pipe(
       map(user => {
-        if (user) {
-          localStorage.setItem("user", JSON.stringify(user));
-          this.currentUser.set(user);
-        }
+        this.currentUser.set(user);
+        return user;
       })
     )
   }
 
-  register(model:any) {
-  }
-
   logout() {
-    localStorage.removeItem("user");
-    this.currentUser.set(null);
+    return this.http.post(this.baseUrl + "account/logout", {});
   }
 
-  getUsers() {
-    return this.http.get(this.baseUrl + "users");
+  updateAddress(address: Address) {
+    return this.http.post(this.baseUrl + "account/address", address)
+  }
+
+  getAuthState() {
+    return this.http.get<{isAuthenticated: boolean}>(this.baseUrl + "account/auth-status");
   }
 
 }

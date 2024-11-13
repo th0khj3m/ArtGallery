@@ -1,0 +1,62 @@
+<mat-card class="max-w-lg mx-auto p-8 bg-white">
+  <div class="flex justify-between mb-6">
+    <h1 class="text-3xl font-semibold text-primary">
+      {{ isLoginMode ? "Sign in" : "Register" }}
+    </h1>
+    <button mat-stroked-button (click)="toggleMode()">
+      {{ !isLoginMode ? "Sign in" : "Register" }}
+    </button>
+  </div>
+  <form
+    [formGroup]="isLoginMode ? loginForm : registerForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <app-text-input
+      *ngIf="!isLoginMode"
+      label="First name"
+      type="text"
+      formControlName="firstName"
+    />
+    <app-text-input
+      *ngIf="!isLoginMode"
+      label="Last name"
+      type="text"
+      formControlName="lastName"
+    />
+
+    <app-text-input
+      label="Email Address"
+      type="email"
+      formControlName="email"
+    />
+    <app-text-input
+      label="Password"
+      type="password"
+      formControlName="password"
+    />
+    <app-text-input
+      *ngIf="!isLoginMode"
+      label="Confirm Password"
+      formControlName="confirmPassword"
+    />
+
+    @if (validationErrors) {
+    <div class="mb-3 p-4 bg-red-100 text-red-600">
+      <ul class="list-disc px-3">
+        @for (error of validationErrors; track $index) {
+        <li>{{ error }}</li>
+        }
+      </ul>
+    </div>
+    }
+
+    <button
+      [disabled]="isLoginMode ? loginForm.invalid : registerForm.invalid"
+      mat-flat-button
+      type="submit"
+      class="w-full py-2"
+    >
+      {{ isLoginMode ? "Sign in" : "Register" }}
+    </button>
+  </form>
+</mat-card>
