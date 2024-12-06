@@ -1,0 +1,32 @@
+[
+  {
+    "ShortName": "Standard",
+    "Description": "Delivery within 5-7 business days",
+    "DeliveryTime": "5-7 days",
+    "Price": 20000
+  },
+  {
+    "ShortName": "Express",
+    "Description": "Fast delivery within 2-3 business days",
+    "DeliveryTime": "2-3 days",
+    "Price": 50000
+  },
+  {
+    "ShortName": "Overnight",
+    "Description": "Next business day delivery",
+    "DeliveryTime": "1 day",
+    "Price": 80000
+  },
+  {
+    "ShortName": "SameDay",
+    "Description": "Same-day delivery for orders placed before noon",
+    "DeliveryTime": "Same day",
+    "Price": 100000
+  },
+  {
+    "ShortName": "Pickup",
+    "Description": "Pick up at the nearest store location",
+    "DeliveryTime": "N/A",
+    "Price": 0
+  }
+]

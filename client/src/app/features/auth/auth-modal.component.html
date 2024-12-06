@@ -7,23 +7,42 @@
       {{ !isLoginMode ? "Sign in" : "Register" }}
     </button>
   </div>
-  <form
-    [formGroup]="isLoginMode ? loginForm : registerForm"
-    (ngSubmit)="onSubmit()"
-  >
+  <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <app-text-input
-      *ngIf="!isLoginMode"
+      label="Email Address"
+      type="email"
+      formControlName="email"
+    />
+    <app-text-input
+      label="Password"
+      type="password"
+      formControlName="password"
+    />
+
+    <div *ngIf="validationErrors" class="mb-5 p-4 bg-red-100 text-red-600">
+      <ul class="list-disc px-3">
+        @for (error of validationErrors; track $index) {
+        <li>{{ error }}</li>
+        }
+      </ul>
+    </div>
+
+    <button
+      [disabled]="loginForm.invalid"
+      mat-flat-button
+      type="submit"
+      class="w-full py-2"
+    >
+      Sign in
+    </button>
+  </form>
+  <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <app-text-input
       label="First name"
       type="text"
       formControlName="firstName"
     />
-    <app-text-input
-      *ngIf="!isLoginMode"
-      label="Last name"
-      type="text"
-      formControlName="lastName"
-    />
-
+    <app-text-input label="Last name" type="text" formControlName="lastName" />
     <app-text-input
       label="Email Address"
       type="email"
@@ -35,28 +54,26 @@
       formControlName="password"
     />
     <app-text-input
-      *ngIf="!isLoginMode"
       label="Confirm Password"
+      type="password"
       formControlName="confirmPassword"
     />
 
-    @if (validationErrors) {
-    <div class="mb-3 p-4 bg-red-100 text-red-600">
+    <div *ngIf="validationErrors" class="mb-5 p-4 bg-red-100 text-red-600">
       <ul class="list-disc px-3">
         @for (error of validationErrors; track $index) {
         <li>{{ error }}</li>
         }
       </ul>
     </div>
-    }
 
     <button
-      [disabled]="isLoginMode ? loginForm.invalid : registerForm.invalid"
+      [disabled]="registerForm.invalid"
       mat-flat-button
       type="submit"
       class="w-full py-2"
     >
-      {{ isLoginMode ? "Sign in" : "Register" }}
+      Register
     </button>
   </form>
 </mat-card>

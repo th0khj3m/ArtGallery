@@ -49,7 +49,7 @@ $customTheme: mat.define-theme();
   }
 
   .mat-mdc-snack-bar-action {
-    background-color: red;
+    background-color: inherit;
   }
 
   .mdc-text-field:not(.mdc-text-field--invalid):not(

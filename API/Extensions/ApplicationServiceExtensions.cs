@@ -30,6 +30,7 @@ namespace Core.Extensions
                 return ConnectionMultiplexer.Connect(configuration);
             });
             services.AddSingleton<ICartService, CartService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             return services;
         }

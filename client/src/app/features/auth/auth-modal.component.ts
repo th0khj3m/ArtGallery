@@ -7,7 +7,7 @@ import { AccountService } from '../../core/services/account.service';
 import { MAT_DIALOG_DATA, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { MatFormField, MatInput } from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { TextInputComponent } from '../../shared/components/text-input/text-input.component';
 
@@ -30,6 +30,7 @@ export class AuthModalComponent {
   private router = inject(Router);
   returnUrl = "/shop";
   validationErrors?: string[];
+  passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   constructor() {
     const url = inject(MAT_DIALOG_DATA)?.returnUrl || "/";
@@ -47,7 +48,7 @@ export class AuthModalComponent {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', [Validators.required, , Validators.email]],
-    password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
+    password: ['', Validators.required],
     confirmPassword: ['', Validators.required]
   });
 
@@ -63,11 +64,19 @@ export class AuthModalComponent {
     }
     else {
       const { password, confirmPassword } = this.registerForm.value;
+      if (typeof password === 'string' && !this.passwordPattern.test(password)) {
+        this.validationErrors = [
+          "Password must contain at least one letter, one number, one special character (@$!%*?&), and be at least 8 characters long."
+        ];
+        return;
+      }
+
       if (password !== confirmPassword) {
         // Add the error message to validationErrors
         this.validationErrors = ["Passwords must match."];
         return;
       }
+
       this.accountService.register(this.registerForm.value).subscribe({
         next: () => {
           this.snack.success("Registration successful - You can now login");
@@ -80,5 +89,8 @@ export class AuthModalComponent {
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
+    const activeForm = this.isLoginMode ? this.loginForm : this.registerForm;
+    activeForm.reset();
+    this.validationErrors = undefined; // Clear manual validation errors
   }
 }

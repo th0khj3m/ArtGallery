@@ -11,6 +11,7 @@ namespace Infrastructure.Data
     {
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

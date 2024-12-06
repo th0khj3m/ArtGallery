@@ -9,6 +9,7 @@ import { CartComponent } from './features/cart/cart.component';
 import { CheckoutComponent } from './features/checkout/checkout.component';
 import { authGuard } from './core/guards/auth.guard';
 import { emptyCartGuard } from './core/guards/empty-cart.guard';
+import { CheckoutSuccessComponent } from './features/checkout-success/checkout-success.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,9 @@ export const routes: Routes = [
   },
   {
     path: "checkout", component: CheckoutComponent, canActivate: [authGuard, emptyCartGuard]
+  },
+  {
+    path: "checkout/success", component: CheckoutSuccessComponent, canActivate: [authGuard]
   },
   {
     path: "test-error", component: TestErrorComponent
