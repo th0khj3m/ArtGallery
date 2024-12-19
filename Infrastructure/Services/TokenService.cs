@@ -6,13 +6,20 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Infrastructure.Services
+namespace Core.Services
 {
-    public class TokenService(IConfiguration config) : ITokenService
+    public class TokenService : ITokenService
     {
+        private readonly IConfiguration _config;
+
+        public TokenService(IConfiguration config)
+        {
+            _config = config;
+        }
+
         public string CreateToken(User user)
         {
-            var tokenKey = config["TokenKey"] ?? throw new Exception("Cannot access tokenKey from appsettings");
+            var tokenKey = _config["TokenKey"] ?? throw new Exception("Cannot access tokenKey from appsettings");
             if (tokenKey.Length < 64) throw new Exception("Your tokenKey needs to be longer");
 
             // Creating a symmetric security key (encrypt and decrypt) using a secret key (tokenKey)

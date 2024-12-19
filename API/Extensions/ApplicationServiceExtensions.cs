@@ -22,6 +22,7 @@ namespace Core.Extensions
             //services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IArtworkRepository, ArtworkRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddCors();
             services.AddSingleton<IConnectionMultiplexer>(provider =>
             {
