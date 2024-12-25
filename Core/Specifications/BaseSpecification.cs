@@ -5,6 +5,7 @@ namespace Core.Specifications
 {
     public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecification<T>
     {
+        // Allows creating a specification without any initial criteria
         protected BaseSpecification() : this(null) { }
 
         public Expression<Func<T, bool>>? Criteria => criteria;

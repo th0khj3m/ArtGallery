@@ -6,20 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Core.Controllers
 {
-    public class ArtworksController(IGenericRepository<Artwork> repo) : BaseApiController
+    public class ArtworksController(IUnitOfWork unit) : BaseApiController
     {
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Artwork>>> GetArtworks([FromQuery] ArtworkSpecParams specParams)
         {
             var spec = new ArtworkSpecification(specParams);
 
-            return await CreatePagedResult(repo, spec, specParams.PageIndex, specParams.PageSize);
+            return await CreatePagedResult(unit.Repository<Artwork>(), spec, specParams.PageIndex, specParams.PageSize);
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Artwork>> GetArtwork(int id)
         {
-            var artwork = await repo.GetByIdAsync(id);
+            var artwork = await unit.Repository<Artwork>().GetByIdAsync(id);
 
             if (artwork == null) return NotFound();
 
@@ -38,9 +38,9 @@ namespace Core.Controllers
                 QuantityInStock = artworkDto.QuantityInStock,
             };
 
-            repo.Add(artwork);
+            unit.Repository<Artwork>().Add(artwork);
 
-            if (await repo.SaveAllAsync())
+            if (await unit.Complete())
             {
                 return CreatedAtAction("GetArtwork", new { id = artwork.Id }, artwork);
             }
@@ -53,9 +53,9 @@ namespace Core.Controllers
         {
             if (artwork.Id != id || !ArtworkExists(id)) return BadRequest("Cannot update this product");
 
-            repo.Update(artwork);
+            unit.Repository<Artwork>().Update(artwork);
 
-            if (await repo.SaveAllAsync())
+            if (await unit.Complete())
             {
                 return NoContent();
             }
@@ -66,13 +66,13 @@ namespace Core.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteArtwork(int id)
         {
-            var artwork = await repo.GetByIdAsync(id);
+            var artwork = await unit.Repository<Artwork>().GetByIdAsync(id);
 
             if (artwork == null) return NotFound();
 
-            repo.Remove(artwork);
+            unit.Repository<Artwork>().Remove(artwork);
 
-            if (await repo.SaveAllAsync())
+            if (await unit.Complete())
             {
                 return NoContent();
             }
@@ -96,7 +96,7 @@ namespace Core.Controllers
 
         private bool ArtworkExists(int id)
         {
-            return repo.Exist(id);
+            return unit.Repository<Artwork>().Exist(id);
         }
 
     }
