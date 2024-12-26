@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using System.Net;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Stripe;
@@ -10,7 +11,21 @@ namespace Infrastructure.Services
     {
         public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId)
         {
-            StripeConfiguration.ApiKey = config["StripeSettings:SecretKey"];
+            var handler = new HttpClientHandler
+            {
+                Proxy = new WebProxy("http://proxy.fpt.vn", 80),
+                UseProxy = true,
+            };
+
+            var httpClient = new HttpClient(handler);
+
+            var stripeClient = new StripeClient(
+                apiKey: config["StripeSettings:SecretKey"],
+                httpClient: new SystemNetHttpClient(httpClient)
+            );
+
+            StripeConfiguration.StripeClient = stripeClient;
+
             var cart = await cartService.GetCartAsync(cartId);
             if (cart == null) return null;
             var shippingPrice = 0m;
