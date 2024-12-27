@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Runtime.CompilerServices;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +8,7 @@ using Stripe;
 namespace Infrastructure.Services
 {
     public class PaymentService(IConfiguration config, ICartService cartService,
-        IGenericRepository<Artwork> artworkRepo, IGenericRepository<DeliveryMethod> dmRepo) : IPaymentService
+        IUnitOfWork unit) : IPaymentService
     {
         public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId)
         {
@@ -20,7 +21,7 @@ namespace Infrastructure.Services
             var httpClient = new HttpClient(handler);
 
             var stripeClient = new StripeClient(
-                apiKey: config["StripeSettings:SecretKey"],
+                apiKey: config["StripeSettings:SecretKey"],      
                 httpClient: new SystemNetHttpClient(httpClient)
             );
 
@@ -32,16 +33,14 @@ namespace Infrastructure.Services
 
             if (cart.DeliveryMethodId.HasValue)
             {
-                var deliveryMethod = await dmRepo.GetByIdAsync((int)cart.DeliveryMethodId);
-
+                var deliveryMethod = await unit.Repository<DeliveryMethod>().GetByIdAsync((int)cart.DeliveryMethodId);
                 if (deliveryMethod == null) return null;
-
                 shippingPrice = deliveryMethod.Price;
             }
 
             foreach (var item in cart.Items)
             {
-                var artworkItem = await artworkRepo.GetByIdAsync(item.ArtworkId);
+                var artworkItem = await unit.Repository<Artwork>().GetByIdAsync(item.ArtworkId);
                 if (artworkItem == null) return null;
                 if (item.Price != artworkItem.Price)
                 {

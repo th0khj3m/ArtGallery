@@ -32,6 +32,7 @@ namespace Core.Extensions
             });
             services.AddSingleton<ICartService, CartService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddSignalR();  
 
             return services;
         }

@@ -29,6 +29,6 @@ export class OrderDetailedComponent implements OnInit {
     if (!id) return;
     this.orderService.getOrderDetailed(+id).subscribe({
       next: order => this.order = order
-    })
+    })  
   }
 }
