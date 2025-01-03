@@ -8,13 +8,14 @@ using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using StackExchange.Redis;
 using Stripe;
 
 namespace API.Controllers
 {
     public class PaymentController(IPaymentService paymentService,
         IUnitOfWork unit, ILogger<PaymentController> logger, 
-        IConfiguration config, IHubContext<NotificationHub> hubContext ) : BaseApiController
+        IConfiguration config, IHubContext<NotificationHub> hubContext, IConnectionMultiplexer redis) : BaseApiController
     {
         private readonly string _whSecret = config["StripeSettings:WhSecret"]!;
 
@@ -68,7 +69,7 @@ namespace API.Controllers
             if (intent.Status == "succeeded")
             {
                 var spec = new OrderSpecification(intent.Id, true);
-                var order = await unit.Repository<Order>().GetEntityWithSpec(spec)
+                var order = await unit.Repository<Core.Entities.OrderAggregate.Order>().GetEntityWithSpec(spec)
                     ?? throw new Exception("Order not found");
 
                 if ((long)order.GetTotal() != intent.Amount)
@@ -82,13 +83,22 @@ namespace API.Controllers
 
                 await unit.Complete();
 
-                // SignalR
-                var connectionId = NotificationHub.GetConnectionIdByEmail(order.BuyerEmail);
+                // SignalR (Using the ConcurrentDictionary)
+                //var connectionId = NotificationHub.GetConnectionIdByEmail(order.BuyerEmail);
 
+                //if (!string.IsNullOrEmpty(connectionId))
+                //{
+                //    await hubContext.Clients.Client(connectionId)
+                //        .SendAsync("OrderCompleteNotification", order.ToDto());
+                //}
+
+                // SignalR (Using the Redis)
+                var db = redis.GetDatabase();
+                var connectionId = await db.StringGetAsync(order.BuyerEmail);
                 if (!string.IsNullOrEmpty(connectionId))
                 {
-                    await hubContext.Clients.Client(connectionId)
-                        .SendAsync("OrderCompleteNotification", order.ToDto());
+                    await hubContext.Clients.Client(connectionId.ToString())
+                        .SendAsync("OrderCompleteNotification", order.ToDto());  
                 }
             }
         }
@@ -103,7 +113,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 logger.LogError(ex, "Failed to construct stripe event");
-                throw new StripeException("Invalid signature");
+                throw new StripeException("Invalid signature"); 
             }
         }
     }
