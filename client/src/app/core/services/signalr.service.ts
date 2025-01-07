@@ -20,8 +20,8 @@ export class SignalrService {
       .build();
 
     this.hubConnection.start()
-      .catch(error => console.log(error)
-      );
+      .then(() => console.log('SignalR connection established.'))
+      .catch(error => console.log('Error establishing SignalR connection:', error));
 
     this.hubConnection.on('OrderCompleteNotification', (order: Order) => {
       this.orderSignal.set(order);
@@ -33,5 +33,5 @@ export class SignalrService {
       this.hubConnection.stop().catch(error => console.log(error)
       );
     }
-  } 
+  }
 }

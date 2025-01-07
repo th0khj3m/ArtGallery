@@ -12,12 +12,12 @@ export class AddressPipe implements PipeTransform {
     if (value && "address" in value && value.name) {
       const { line1, line2, state, city, country, postal_code } =
         (value as ConfirmationToken['shipping'])?.address!;
-      return `${value.name}, ${line1}${line2 ? ', ' + line2 : ''}, ${city}, ${state}, ${postal_code}, ${country}`
+      return `${value.name}, ${line1}${line2 ? ', ' + line2 : ''}, ${state}, ${postal_code}, ${country}`
     }
     else if (value && 'line1' in value) {
       const { line1, line2, state, city, country, postalCode } =
         value as ShippingAddress
-      return `${value.name}, ${line1}${line2 ? ', ' + line2 : ''}, ${city}, ${state}, ${postalCode}, ${country}`
+      return `${value.name}, ${line1}${line2 ? ', ' + line2 : ''}, ${state}, ${postalCode}, ${country}`
     } else {
       return "Unknown address"
     }

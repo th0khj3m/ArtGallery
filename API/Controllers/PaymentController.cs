@@ -14,8 +14,8 @@ using Stripe;
 namespace API.Controllers
 {
     public class PaymentController(IPaymentService paymentService,
-        IUnitOfWork unit, ILogger<PaymentController> logger, 
-        IConfiguration config, IHubContext<NotificationHub> hubContext, IConnectionMultiplexer redis) : BaseApiController
+        IUnitOfWork unit, ILogger<PaymentController> logger, IConfiguration config, 
+        IHubContext<NotificationHub> hubContext, IConnectionMultiplexer redis) : BaseApiController
     {
         private readonly string _whSecret = config["StripeSettings:WhSecret"]!;
 
@@ -95,10 +95,11 @@ namespace API.Controllers
                 // SignalR (Using the Redis)
                 var db = redis.GetDatabase();
                 var connectionId = await db.StringGetAsync(order.BuyerEmail);
+                // If a connection ID is found, send a notification to the client
                 if (!string.IsNullOrEmpty(connectionId))
                 {
-                    await hubContext.Clients.Client(connectionId.ToString())
-                        .SendAsync("OrderCompleteNotification", order.ToDto());  
+                    await hubContext.Clients.Client(connectionId)
+                        .SendAsync("OrderCompleteNotification", order.ToDto());
                 }
             }
         }

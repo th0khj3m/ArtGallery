@@ -1,8 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Configuration;
-using API.DTOs;
-using API.Extensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using StackExchange.Redis;
 

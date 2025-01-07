@@ -95,5 +95,20 @@ namespace API.Controllers
             return order.ToDto();
         }
 
+        [HttpGet("payment-intent/{paymentIntentId}")]
+        public async Task<ActionResult<OrderDto>> GetOrderByPaymentIntentId(string paymentIntentId)
+        {
+            // Create a specification to find the order by PaymentIntentId and the current user's email
+            var spec = new OrderSpecification(paymentIntentId, true);
+
+            // Retrieve the order using the specification
+            var order = await unit.Repository<Order>().GetEntityWithSpec(spec);
+
+            // If the order is not found, return NotFound
+            if (order == null) return NotFound();
+
+            // Return the order as a DTO
+            return Ok(order.ToDto());
+        }
     }
 }
