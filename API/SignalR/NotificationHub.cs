@@ -42,7 +42,7 @@ namespace API.SignalR
             if (!string.IsNullOrEmpty(email))
             {
                 var db = redis.GetDatabase();
-                await db.StringSetAsync($"connection:{email}", Context.ConnectionId);
+                await db.StringSetAsync(email, Context.ConnectionId);
             }
 
             await base.OnConnectedAsync();  
@@ -54,7 +54,7 @@ namespace API.SignalR
             if (!string.IsNullOrEmpty(email))
             {
                 var db = redis.GetDatabase();
-                await db.KeyDeleteAsync($"connection:{email}");
+                await db.KeyDeleteAsync(email);
             }
 
             await base.OnDisconnectedAsync(exception);

@@ -8,6 +8,7 @@ using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using Stripe;
 
@@ -44,8 +45,15 @@ namespace API.Controllers
             try
             {
                 var stripeEvent = ConstructStripeEvent(json);
+                if (stripeEvent == null)
+                {
+                    logger.LogWarning("Failed to construct a valid Stripe event");
+                    return BadRequest("Invalid Stripe event");
+                }
+
                 if (stripeEvent.Data.Object is not PaymentIntent intent)
                 {
+                    logger.LogWarning("Stripe event does not contain a PaymentIntent object");
                     return BadRequest("Invalid event data");
                 }
 
@@ -54,12 +62,12 @@ namespace API.Controllers
             }
             catch (StripeException ex)
             {
-                logger.LogError(ex, "Stripe webhook error");
+                logger.LogError(ex, "An unexpected error occurred in StripeWebhook: {Message}", ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Webhook error");
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "An unexpected error occured");
+                logger.LogError(ex, "An unexpected error occured, {Message}", ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occured");  
             }
         }
@@ -92,10 +100,8 @@ namespace API.Controllers
                 //        .SendAsync("OrderCompleteNotification", order.ToDto());
                 //}
 
-                // SignalR (Using the Redis)
                 var db = redis.GetDatabase();
                 var connectionId = await db.StringGetAsync(order.BuyerEmail);
-                // If a connection ID is found, send a notification to the client
                 if (!string.IsNullOrEmpty(connectionId))
                 {
                     await hubContext.Clients.Client(connectionId)
