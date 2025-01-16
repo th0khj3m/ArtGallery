@@ -1,14 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { AccountService } from './core/services/account.service';
 import { HeaderComponent } from "./layout/header/header.component";
-import { ShopComponent } from './features/shop/shop.component';
-import { HomeComponent } from './features/home/home.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HomeComponent, HeaderComponent, ShopComponent],
+  imports: [RouterOutlet, HeaderComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -16,8 +15,14 @@ export class AppComponent implements OnInit {
   title = "PoemArtGallery";
   private accountService = inject(AccountService);
 
+  constructor(private router: Router) { }
+
   ngOnInit(): void {
     this.setCurrentUser();
+  }
+
+  isHomeRoute(): boolean {
+    return this.router.url === '/';
   }
 
   setCurrentUser() {

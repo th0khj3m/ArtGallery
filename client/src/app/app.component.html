@@ -1,5 +1,4 @@
 <app-header></app-header>
-
-<main class="h-22 bg-dark text-white mt-24">
+<main class="h-22 bg-dark text-white" [ngStyle]="{'margin-top': isHomeRoute() ? '0' : '100px'}">
   <router-outlet></router-outlet>
 </main>
