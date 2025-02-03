@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using System.Reflection;
 using System.Text.Json;
 
 namespace Infrastructure.Data
@@ -7,9 +8,12 @@ namespace Infrastructure.Data
     {
         public static async Task SeedAsync(StoreContext context)
         {
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             if (!context.Artworks.Any())
             {
-                var artworksData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/artworks.json");
+                var artworksData = await File
+                    .ReadAllTextAsync(path + @"/Data/SeedData/artworks.json");
 
                 var artworks = JsonSerializer.Deserialize<List<Artwork>>(artworksData);
 
@@ -22,7 +26,7 @@ namespace Infrastructure.Data
 
             if (!context.DeliveryMethods.Any())
             {
-                var dmData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/delivery.json");
+                var dmData = await File.ReadAllTextAsync(path + @"/Data/SeedData/delivery.json");
 
                 var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(dmData);
 
