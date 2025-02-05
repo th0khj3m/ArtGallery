@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Runtime.CompilerServices;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -7,11 +6,17 @@ using Stripe;
 
 namespace Infrastructure.Services
 {
-    public class PaymentService(IConfiguration config, ICartService cartService,
-        IUnitOfWork unit) : IPaymentService
+    public class PaymentService : IPaymentService
     {
-        public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId)
+        private readonly ICartService cartService;
+        private readonly IUnitOfWork unit;
+
+        public PaymentService(IConfiguration config, ICartService cartService,
+        IUnitOfWork unit)
         {
+            this.cartService = cartService;
+            this.unit = unit;
+
             var handler = new HttpClientHandler
             {
                 Proxy = new WebProxy("http://proxy.fpt.vn", 80),
@@ -21,12 +26,15 @@ namespace Infrastructure.Services
             var httpClient = new HttpClient(handler);
 
             var stripeClient = new StripeClient(
-                apiKey: config["StripeSettings:SecretKey"],      
+                apiKey: config["StripeSettings:SecretKey"],
                 httpClient: new SystemNetHttpClient(httpClient)
             );
 
             StripeConfiguration.StripeClient = stripeClient;
+        }
 
+        public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId)
+        {
             var cart = await cartService.GetCartAsync(cartId);
             if (cart == null) return null;
             var shippingPrice = 0m;
@@ -74,6 +82,20 @@ namespace Infrastructure.Services
 
             await cartService.SetCartAsync(cart);
             return cart;
+        }
+
+        public async Task<string> RefundPayment(string paymentIntentId) {
+
+            var refundOptions = new RefundCreateOptions
+            {
+                PaymentIntent = paymentIntentId,
+            };
+            
+            var refundService = new RefundService();
+            var result = await refundService.CreateAsync(refundOptions);
+
+            return result.Status;
+
         }
     }
 }

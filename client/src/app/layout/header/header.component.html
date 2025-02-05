@@ -6,6 +6,7 @@
       <a routerLink="/shop" routerLinkActive="active">Artworks</a>
       <a routerLinkActive="active">Favorites</a>
       <a routerLink="/test-error" routerLinkActive="active">Errors</a>
+      <a *appIsAdmin routerLink="/admin" routerLinkActive="active">Admin</a>
     </nav>
     <div class="flex gap-3 align-middle items-center">
       <a matBadge="{{ cartService.itemCount() }}" routerLink="/cart" matBadgeSize="medium"

@@ -13,6 +13,7 @@ import { CheckoutSuccessComponent } from './features/checkout-success/checkout-s
 import { OrderComponent } from './features/orders/order.component';
 import { OrderDetailedComponent } from './features/orders/order-detailed/order-detailed.component';
 import { orderCompleteGuard } from './core/guards/order-complete.guard';
+import { AdminComponent } from './features/admin/admin.component';
 
 export const routes: Routes = [
   {
@@ -50,6 +51,9 @@ export const routes: Routes = [
   },
   {
     path: "server-error", component: ServerErrorComponent
+  },
+  {
+    path: "admin", component: AdminComponent, canActivate: [authGuard]
   },
   {
     path: "**", redirectTo: "not-found", pathMatch: "full",
