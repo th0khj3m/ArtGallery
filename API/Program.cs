@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Core.Middleware;
 using Core.Entities;
 using API.SignalR;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,8 +77,9 @@ try
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<StoreContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>(); 
     await context.Database.MigrateAsync(); // Create db if no db and apply any pending migrations
-    await StoreContextSeed.SeedAsync(context);
+    await StoreContextSeed.SeedAsync(context, userManager);
 }
 catch (Exception ex)
 {

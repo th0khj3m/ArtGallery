@@ -28,6 +28,7 @@ namespace Core.Extensions
             {
                 var connString = config.GetConnectionString("Redis") ?? throw new Exception("Cannot get redis connection string");
                 var configuration = ConfigurationOptions.Parse(connString, true);
+
                 return ConnectionMultiplexer.Connect(configuration);
             });
             services.AddSingleton<ICartService, CartService>();

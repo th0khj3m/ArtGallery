@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Core.Controllers
@@ -26,6 +27,7 @@ namespace Core.Controllers
             return artwork;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ArtworkDto>> CreateArtwork(ArtworkDto artworkDto)
         {
@@ -48,6 +50,7 @@ namespace Core.Controllers
             return artworkDto;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateProduct(int id, Artwork artwork)
         {

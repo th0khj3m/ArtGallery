@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Core.Extensions
 {
@@ -21,7 +22,9 @@ namespace Core.Extensions
             //});
 
             services.AddAuthorization();
-            services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<StoreContext>();
+            services.AddIdentityApiEndpoints<AppUser>().
+                AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<StoreContext>();
             return services;
         }
     }

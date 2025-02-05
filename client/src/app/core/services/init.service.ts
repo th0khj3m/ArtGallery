@@ -14,13 +14,14 @@ export class InitService {
 
   init() {
     const cartId = localStorage.getItem("cart_id");
-    const cart$ = cartId ? this.cartService.getCart(cartId) : of(null)
+    //Kiểm tra nếu có cartId thì gọi service để lấy giỏ hàng, nếu không có thì trả về null dưới dạng Observable
+    const cart$ = cartId ? this.cartService.getCart(cartId) : of(null) 
 
-    return forkJoin({
+    return forkJoin({ //Hàm dùng để kết hợp nhiều Observable và trả về kết quả của tất cả các Obs đấy
       cart: cart$,
       user: this.accountService.getUserInfo().pipe(
         tap(user => {
-          if (user) this.signalrService.createHubConnection();
+          if (user) this.signalrService.createHubConnection(); //Nếu user tồn tại, tạo kết nối SignalR
         })
       )
     })
