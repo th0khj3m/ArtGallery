@@ -58,8 +58,10 @@ export class HeaderComponent {
   }
 
   openLoginModal() {
+    const currentUrl = this.router.url;
     this.dialogService.open(AuthModalComponent, {
       autoFocus: false,
+      data: { returnUrl: currentUrl }
     });
   }
 }

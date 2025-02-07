@@ -9,11 +9,9 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ MatCard, ArtworkItemComponent, MatButton, RouterLink ],
+  imports: [MatCard, ArtworkItemComponent, MatButton, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  private shopService = inject(ShopService);
-  artworks: Artwork[] = [];
 }

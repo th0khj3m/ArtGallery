@@ -1,7 +1,7 @@
 import { CommonModule, JsonPipe } from '@angular/common';
 import { MatError, MatLabel } from '@angular/material/form-field';
 import { MatCard } from '@angular/material/card';
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccountService } from '../../core/services/account.service';
 import { MAT_DIALOG_DATA, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
@@ -28,16 +28,14 @@ export class AuthModalComponent {
   private dialogRef = inject(MatDialogRef<AuthModalComponent>);
   private snack = inject(SnackbarService);
   private router = inject(Router);
-  returnUrl = "/shop";
+  private returnUrl: string;
+  private passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   validationErrors?: string[];
-  passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-  constructor() {
-    const url = inject(MAT_DIALOG_DATA)?.returnUrl || "/";
-    if (url) this.returnUrl = url;
-  }
-
   isLoginMode = true;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    this.returnUrl = data?.returnUrl || "/";
+  }
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
